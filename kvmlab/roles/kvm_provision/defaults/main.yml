@@ -1,0 +1,21 @@
+---
+# defaults file for kvm_provision
+#
+#base_image_name: debian-11-genericcloud-amd64.qcow2
+#base_image_url: https://cloud.debian.org/images/cloud/bullseye/latest/{{ base_image_name }}
+#base_image_sha: 117971e050525b3c718058dd1eafabc1b78dcc181d2a0bcf32dc8d6df0c30b4618d409abd6c78bbbbcdb0d1738ae234923d4716059ef056c31f60b2a0485bfc9 
+#base_image_name: Fedora-Cloud-Base-34-1.2.x86_64.qcow2
+#base_image_url: https://download.fedoraproject.org/pub/fedora/linux/releases/34/Cloud/x86_64/images/{{ base_image_name }}
+#base_image_sha: b9b621b26725ba95442d9a56cbaa054784e0779a9522ec6eafff07c6e6f717ea
+base_image_name: focal-server-cloudimg-amd64.img
+base_image_url: https://cloud-images.ubuntu.com/focal/20220318/{{ base_image_name }}
+base_image_sha: 6a08ecbbc98909da8abd1bd160ebbef92b792bb8a193f58210bd2c65aa23d145 
+
+pool_dir: "/home/calin/images"
+vm_name: mkdev
+vm_vcpus: 2
+vm_ram_mb: 16384
+vm_net: br0
+vm_root_pass: G21200qws 
+cleanup_tmp: no
+ssh_key: /home/calin/.ssh/id_kube.pub

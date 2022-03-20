@@ -1,0 +1,35 @@
+---
+# Create a VM 
+- name: Create VM if not exists
+  block:
+  - name: Create VM image from base
+    copy:
+      dest: "{{ pool_dir }}/image_{{ vm_name }}.img"
+      src: "{{ pool_dir }}/{{ base_image_name }}"
+    register: copy_results
+  - name: Create user data from template
+    template:
+      src: user-data-template.yaml.j2
+      dest: "{{ pool_dir }}/{{ vm_name }}-user-data.yaml"
+      mode: 0644
+  - name: Resize the image
+    command: |
+      qemu-img resize "{{ pool_dir }}/image_{{ vm_name }}.img" "{{ vm_image_size }}"
+  - name: Create cloud init disk
+    command: |
+      cloud-localds -v "{{ pool_dir }}/image_{{ vm_name }}_clcnf.img" "{{ pool_dir }}/{{ vm_name }}-user-data.yaml"
+  - name: Create the VM 
+    command: |
+      virt-install \
+      --name "{{ vm_name }}" \
+      --memory  "{{ vm_ram_mb }}" \
+      --vcpus "{{ vm_vcpus }}" \
+      --disk "{{ pool_dir }}/image_{{ vm_name }}.img",device=disk,bus=virtio \
+      --disk "{{ pool_dir }}/image_{{ vm_name }}_clcnf.img",device=cdrom \
+      --boot hd \
+      --os-type linux \
+      --os-variant ubuntu20.04 \
+      --virt-type kvm \
+      --graphics none \
+      --noautoconsole \
+      --network bridge=br0

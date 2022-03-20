@@ -1,0 +1,30 @@
+---
+# tasks file for kvm_provision
+- name: Ensure requirements in place
+  package:
+    name:
+      - libguestfs-tools 
+      - python3-libvirt
+    state: present
+  become: yes
+- name: Get VMs list
+  community.libvirt.virt:
+    command: list_vms
+  register: existing_vms
+  changed_when: no
+- name: Download base image
+  become: yes
+  get_url:
+    url: "{{ base_image_url }}"
+    dest: "{{ pool_dir }}/{{ base_image_name }}"
+    checksum: "sha256:{{ base_image_sha }}"
+  register: base_image
+- name: create the vms
+  include_tasks: create_vm.yml
+  vars:
+    vm_name: "{{ item }}{{ inventory_hostname }}"
+  loop: "{{ vm_names }}"
+- name: wait for VMs to finish installing
+  wait_for:
+    timeout: 300
+
