@@ -3,26 +3,18 @@
   gather_facts: yes
   become: yes
   vars:
-    pool_dir: "/home/calin/images"
-    vcpus: 2
-    ram_mb: 2048
-    disk_size_gb: 100G
-    cleanup: no
-    net: br0 
-    ssh_pub_key: "/home/calin/.ssh/id_kube.pub"
     vmnames:
       - devnode1
       - devnode2
   tasks:
     - name: provision kvm nodes
       include_role:
-        name: kvm_provision
+        name: vmspawn
       vars:
-        libvirt_pool_dir: "{{ pool_dir }}"
+        pool_home: "{{ pool_dir }}"
         vm_names: "{{ vmnames }}"
         vm_vcpus: "{{ vcpus }}"
         vm_ram_mb: "{{ ram_mb }}"
-        vm_net: "{{ net }}"
-        cleanup_tmp: "{{ cleanup }}"
-        ssh_key: "{{ ssh_pub_key }}"
+        vm_user: "{{ user_name }}"
+        vm_ssh_key: "{{ ssh_pub_key }}"
         vm_image_size: "{{ disk_size_gb }}"

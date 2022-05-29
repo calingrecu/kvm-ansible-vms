@@ -1,1 +1,3 @@
-ansible-playbook -K kvm_provision.yaml
+# !/bin/bash
+
+ansible-playbook -K vmspawn.yaml

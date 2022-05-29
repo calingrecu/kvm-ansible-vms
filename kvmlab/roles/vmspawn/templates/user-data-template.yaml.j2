@@ -1,0 +1,15 @@
+#cloud-config
+hostname: "{{ vm_name }}" 
+users:
+  - default
+  - name: "{{ vm_user }}"
+    sudo: "ALL=(ALL) NOPASSWD:ALL"
+    shell: "/bin/bash"
+    ssh-authorized-keys:
+      - "{{ vm_ssh_key }}"
+package_upgrade: true
+power_state:
+  delay: "+5"
+  mode: reboot
+  condition: true
+
